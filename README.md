@@ -139,78 +139,49 @@ stories_kin/
 Qui pourra ou non être modifié dans la suite du projet 
 elle pourra ou non ressembler à celle ci :
 
-stories_kin/
-├── android/
-├── ios/
-├── lib/
-│
-│── main.dart                          # Point d'entrée de l'application
-│── app_config.dart                    # Configuration globale de l'app
-│
-├── config/                            # Configuration (thèmes, constantes)
-│   ├── app_theme.dart                 # Thème clair et sombre
-│   ├── app_colors.dart                # Couleurs de référence
-│   ├── app_text_styles.dart           # Styles de texte
-│   └── app_constants.dart             # Constantes générales
-│
-├── core/                              # Utilitaires globaux et widgets communs
-│   ├── widgets/
-│   │   ├── custom_appbar.dart         # Barre d’app personnalisée
-│   │   ├── article_card.dart          # Carte pour afficher une publication
-│   │   └── drawer_menu.dart           # Menu latéral
-│   ├── helpers/
-│   │   └── format_utils.dart          # Formatage de texte, date, etc.
-│   └── services/
-│       ├── auth_service.dart          # Connexion Firebase Auth
-│       ├── user_service.dart          # Gestion utilisateurs
-│       ├── post_service.dart          # Gestion publications
-│       └── firestore_service.dart     # Accès Firestore
-│
-├── models/                            # Modèles de données (Data Models)
-│   ├── utilisateur_model.dart
-│   ├── publication_model.dart
-│   ├── thematique_model.dart
-│   ├── commentaire_model.dart
-│   └--─ notification_model.dart
-│
-├── views/                             # Interfaces utilisateur (UI)
-│   ├── authentication/
+lib/
+├── main.dart
+├── app_config.dart
+├── routes/
+│   └── app_routes.dart
+├── config/
+│   ├── app_theme.dart
+│   ├── app_colors.dart
+│   └── constants.dart
+├── models/
+│   ├── user_model.dart
+│   ├── post_model.dart
+│   ├── notification_model.dart
+├── services/
+│   ├── auth_service.dart
+│   ├── post_service.dart
+│   ├── user_service.dart
+│   ├── notification_service.dart
+│   └── firestore_service.dart
+├── controllers/
+│   ├── auth_controller.dart
+│   ├── post_controller.dart
+│   ├── user_controller.dart
+├── views/
+│   ├── auth/
 │   │   ├── login_view.dart
 │   │   ├── register_view.dart
-│   │   └── splash_screen.dart
-│
 │   ├── accueil/
-│   │   └── accueil_view.dart          # Page d’accueil personnalisée
-│
-│   ├── publications/
-│   │   ├── liste_publications.dart    # Fil d’articles
-│   │   └── detail_publication.dart    # Affichage complet d’un article
-│
-│   ├── utilisateurs/
-│   │   ├── profil_utilisateur.dart
-│   │   └── modifier_profil.dart
-│
+│   │   ├── home_view.dart
+│   │   └── post_detail_view.dart
+│   ├── profil/
+│   │   └── profile_view.dart
 │   ├── favoris/
-│   │   └── favoris_view.dart
-│
-│   ├── recherche/
-│   │   └── recherche_view.dart
-│
+│   │   └── favorites_view.dart
 │   ├── notifications/
 │   │   └── notifications_view.dart
-│
-│   └── parametres/
-│       └── parametres_view.dart       # Page des paramètres utilisateurs
-│
-├── controllers/                       # Logique de gestion de chaque vue
-│   ├── auth_controller.dart
-│   ├── publication_controller.dart
-│   ├── utilisateur_controller.dart
-│   └── recherche_controller.dart
-│
-├── routes/
-│   └── app_routes.dart                # Toutes les routes de navigation
-│
-├── firebase_options.dart              # Options Firebase auto-générées
-├── pubspec.yaml
-└── README.md
+│   ├── recherche/
+│   │   └── search_view.dart
+│   └── settings/
+│       └── settings_view.dart
+├── widgets/
+│   ├── post_card.dart
+│   ├── custom_appbar.dart
+│   ├── drawer_menu.dart
+│   ├── loading_indicator.dart
+│   └── story_preview.dart
