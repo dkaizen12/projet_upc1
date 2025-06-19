@@ -22,41 +22,40 @@ class _FirstScreenState extends State<FirstScreen> {
         ),
 
         // 🔹 Contenu au-dessus de l’image
+        Positioned(top : 20,
+        left: 200,
+        child: Icon(Icons.phone)),
         Positioned(
-          top: 450,
+          top: 40,
+          left: 200,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.5), // Effet flouté
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Text(
+              'Bienvenue sur Stories +243',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                decoration: TextDecoration.none,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 30,
           left: 40,
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.5), // Effet flouté
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Text(
-                    'Bienvenue sur Stories +243',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      Navigator.pushNamed(context, Routes.home);
-                    });
-                  },
-                  child: const Text("Commencez"),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll<Color>(
-                      Colors.black,
-                    ),
-                  ),
-                ),
-              ],
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                Navigator.pushNamed(context, Routes.home);
+              });
+            },
+            child: const Text("Commencez"),
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll<Color>(Colors.black),
             ),
           ),
         ),
