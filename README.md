@@ -17,7 +17,6 @@ Créer une application mobile où les Kinois peuvent **publier, consulter et par
 ---
 
 ## ✨ Fonctionnalités prévues
-
 | Catégorie           | Fonctionnalité principale                                       |
 |---------------------|------------------------------------------------------------------|
 | 🔐 Authentification | Inscription / Connexion (email, numéro, Google)                |
@@ -109,12 +108,12 @@ Voici un **plan d’apprentissage et d’application sur 10 jours** spécialemen
 
 ### 📅 Jour 2 : Authentification Firebase (email + Google)
 
-**🎓 Apprentissage :**
+** Apprentissage :**
 
 * Firebase Auth (email/password & Google Sign-In)
 * Notion de `Future`, `async/await`
 
-**🛠 Application :**
+** Application :**
 
 * Création des vues : `login_view.dart` et `register_view.dart`
 * Intégration de `firebase_auth` et `google_sign_in`
@@ -254,3 +253,80 @@ android   1:824495606100:android:bc677a4546982096a3a0c1
 ios       1:824495606100:ios:2ca02cad98bd0f3fa3a0c1
 macos     1:824495606100:ios:2ca02cad98bd0f3fa3a0c1
 windows   1:824495606100:web:887f9a5fe3dd6718a3a0c1
+
+## 📦 Étape 1 – Initialisation du projet Flutter + Firebase
+### 🎓 Objectifs d’apprentissage
+Avant de commencer à coder l'application, il est important de :
+
+* 🧠 **Comprendre la structure d’un projet Flutter** : `lib/`, `android/`, `pubspec.yaml`, `main.dart`, etc.
+* 🧠 **Maîtriser le cycle de vie d’une application Flutter** : du `main()` jusqu’au rendu des widgets.
+* ☁️ **Comprendre ce qu’est Firebase** :
+  * Base de données (`Cloud Firestore`)
+  * Authentification (`Firebase Auth`)
+  * Stockage des médias (`Firebase Storage`)
+  * Notifications (`Firebase Messaging`)
+---
+### 🛠 Mise en œuvre sur le projet `Stories +243`
+1. Création du projet Flutter
+```bash
+flutter create projet_upc1
+cd projet_upc1
+```
+Organisation de la structure Flutter personnalisée
+
+Dans le dossier `lib/`, création des sous-dossiers :
+
+lib/
+├── main.dart                    # Entrée de l’application
+├── models/                     # Modèles de données (post, user, etc.)
+├── views/                      # Interfaces utilisateur
+├── services/                   # Auth, Firestore, etc.
+├── controllers/                # Gestion d’état
+├── widgets/                    # Composants réutilisables
+├── config/                     # Thèmes, constantes
+└── routes.dart                 # Système de navigation
+```
+3. Création d’un projet Firebase
+
+    * Se rendre sur [Firebase Console](https://console.firebase.google.com/)
+    * Créer un projet nommé `stories-kin` ou similaire
+    * Ajouter une application **Android**
+
+        * Nom du package : `com.upc.storieskin` (doit correspondre au `AndroidManifest.xml`)
+        * Télécharger et placer le fichier `google-services.json` dans :
+          👉 `android/app/google-services.json`
+
+4. **Ajout des dépendances Firebase dans `pubspec.yaml`**
+
+```yaml
+dependencies:
+  firebase_core: ^2.0.0
+  firebase_auth: ^4.0.0
+  cloud_firestore: ^4.0.0
+  firebase_storage: ^11.0.0
+  firebase_messaging: ^14.0.0
+  provider: ^6.0.0
+  shared_preferences: ^2.0.0
+  fluttertoast: ^8.2.0
+  google_sign_in: ^6.0.0
+```
+Configuration du projet Android (`android/app/build.gradle`)
+```gradle
+apply plugin: 'com.google.gms.google-services'
+
+android {
+  // ...
+  defaultConfig {
+    applicationId "com.upc.storieskin"
+    minSdkVersion 21
+    // ...
+  }
+}
+```⚠️ Difficultés courantes rencontrées
+| Problème                                         | Cause probable                                           | Solution                                                         |
+| ------------------------------------------------ | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `google-services.json` non détecté               | Mauvais dossier (doit être dans `android/app/`)          | Vérifie l’arborescence                                           |
+| Erreur `Plugin project :firebase_core not found` | Plugin mal installé                                      | Réexécuter `flutter pub get`                                     |
+| Crash à l’exécution                              | Incohérence entre `applicationId` et le package Firebase | Aligne le nom dans Firebase et `build.gradle`                    |
+| Firebase non initialisé                          | `WidgetsFlutterBinding.ensureInitialized()` manquant     | Ajoute-le dans `main.dart`                                       |
+| Erreur `MissingPluginException`                  | Problème de liaison de plugin                            | Fais `flutter clean`, puis `flutter pub get`, puis `flutter run` |
