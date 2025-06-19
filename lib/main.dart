@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:projet_upc1/routes.dart';
-import 'package:projet_upc1/lib/vu_ui/acceuil/home.dart';
+//import 'package:projet_upc1/routes.dart';
+//import 'package:path/path.dart';
+import 'vu_ui/accueil/home.dart';
 
 // ...
 
@@ -24,9 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Bonjour'),
+      home: MyHomePage(title: 'Bonjour'),
     );
   }
 }
-
-

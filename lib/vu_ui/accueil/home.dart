@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projet_upc1/routes.dart';
+//import 'package:projet_upc1/routes.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -20,6 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
+        child: Text("ça marche"),
       ),
     );
   }

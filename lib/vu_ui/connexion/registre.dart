@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 //page d'enregistrement
 
-class Registre_vieuw extends statefullWidget {
-  const MyHomePage({super.key, required this.email, required this.password});
-  String email ;
-  String password;
+class Registre_page extends StatefulWidget {
+  const Registre_page({super.key, });
+
   @override
-  State<Registre_vieuw> createState() => _Registre_vieuw();
+  State<Registre_page> createState() => _Registre_pageState();
 }
 
-class _Registre_vieuw extends statefullWideget {
-
+class _Registre_pageState extends State<Registre_page> {
   @override
-  Widget build (BuildContext context){
-    return Scaffold(
-      appBar : AppBar (),
-      body : center(
-        TextField
-      ),
-
-    );
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

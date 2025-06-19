@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 //page de connexion
 
-class login_vieuw extends statefullWidget {
-  const login_vieuw({super.key, required this.email, required this.password});
-  String email ;
-  String password;
+class login_vieuw extends StatefulWidget {
+  const login_vieuw({super.key});
+
   @override
-  State<login_vieuw> createState() => _login_vieuw();
+  State<login_vieuw> createState() => _login_vieuwState();
 }
 
-class _login_vieuw extends statefullWideget {
-
+class _login_vieuwState extends State<login_vieuw> {
   @override
-  Widget build (BuildContext context){
-    return Scaffold(
-      appBar : AppBar (BackgroungColor : colors.red),
-      body : center(),
-    );
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
