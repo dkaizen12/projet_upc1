@@ -1,7 +1,7 @@
 # projet_upc1
 projet academique 2024-2025
 
-Titre du projet : Plateforme mobile de publications culturelles, informatives et sociales autour de Kinshasa
+Titre du projet : Plateforme mobile de publications culturelles, informatives et sociales autour de Kinshasa 
 Présentation générale 
 Dans le contexte dynamique de la ville de Kinshasa, riche en histoires, actualités urbaines, communautés et contenus créatifs, cette application vise à devenir un carrefour de publications digitales centré sur la vie kinosienne. Elle proposera un système de compte utilisateur, un menu d'accueil personnalisé, des contenus en lecture ou en favoris, une navigation par thématiques et une présentation détaillée des publications.
 Objectifs du projet :
