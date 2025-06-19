@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-//import 'package:projet_upc1/routes.dart';
+import 'routes.dart';
 //import 'package:path/path.dart';
+//import 'vu_ui/accueil/home.dart';
+import 'present.dart';
 import 'vu_ui/accueil/home.dart';
+import 'vu_ui/accueil/post_details.dart';
+import 'vu_ui/connexion/connexion.dart';
+import 'vu_ui/connexion/registre.dart';
+import 'vu_ui/favoris/favoris.dart';
+import 'vu_ui/notification/notif.dart';
+import 'vu_ui/parametre/parametre.dart';
+import 'vu_ui/profil/profil.dart';
+import 'vu_ui/recherche/search.dart';
 
 // ...
 
@@ -25,7 +35,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: MyHomePage(title: 'Bonjour'),
+        initialRoute: Routes.present,
+  routes: {
+    Routes.home: (context) => const MyHomePage(title: "Acceuil"),
+    Routes.post: (context) => const PostDetails(),
+    Routes.login: (context) => const login_vieuw(),
+    Routes.registre : (context) => const Registre_page(),
+    Routes.favoris: (context) => const FavorisVieuw(),
+    Routes.notif: (context) => const NotifVieuw(),
+    Routes.setting: (context) => const SettingVieuw(),
+    Routes.search: (context) => const SearchVieuw(),
+    Routes.profil: (context) => const ProfilScreen(),
+  },
+      home: FirstScreen(),
     );
   }
 }
