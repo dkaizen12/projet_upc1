@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'routes.dart';
+import 'widgets_communs/responsive.dart';
 
-class FirstScreen extends StatefulWidget {
+class FirstScreen extends StatelessWidget {
   const FirstScreen({super.key});
 
   @override
-  State<FirstScreen> createState() => _FirstScreenState();
+  Widget build(BuildContext context) {
+    return const ResponsiveLayout(
+      mobile: FirstScreenMobile(),
+      tablet: FirstScreenTablet(),
+      orientation: PaysageScreen(),
+    );
+  }
 }
 
-class _FirstScreenState extends State<FirstScreen> {
+class FirstScreenMobile extends StatefulWidget {
+  const FirstScreenMobile({super.key});
+
+  @override
+  State<FirstScreenMobile> createState() => _FirstScreenMobileState();
+}
+
+class _FirstScreenMobileState extends State<FirstScreenMobile> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Stack(
       children: [
         // 🔹 Arrière-plan avec une image
@@ -22,12 +37,11 @@ class _FirstScreenState extends State<FirstScreen> {
         ),
 
         // 🔹 Contenu au-dessus de l’image
-        Positioned(top : 20,
-        left: 200,
-        child: Icon(Icons.phone)),
+        Positioned(top: size.height * 0.2, 
+        left: size.width * 0.5, child: Icon(Icons.phone)),
         Positioned(
-          top: 40,
-          left: 200,
+          top: size.height * 0.4,
+          left: size.width *0.25,
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -45,8 +59,8 @@ class _FirstScreenState extends State<FirstScreen> {
           ),
         ),
         Positioned(
-          bottom: 30,
-          left: 40,
+          bottom: size.height*0.03,
+          left: size.width *0.25,
           child: ElevatedButton(
             onPressed: () {
               setState(() {
@@ -61,5 +75,47 @@ class _FirstScreenState extends State<FirstScreen> {
         ),
       ],
     );
+  }
+}
+
+class FirstScreenTablet extends StatefulWidget {
+  const FirstScreenTablet({super.key});
+
+  @override
+  State<FirstScreenTablet> createState() => _FirstScreenTabletState();
+}
+
+class _FirstScreenTabletState extends State<FirstScreenTablet> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class FirstScreenDesktop extends StatefulWidget {
+  const FirstScreenDesktop({super.key});
+
+  @override
+  State<FirstScreenDesktop> createState() => _FirstScreenDesktopState();
+}
+
+class _FirstScreenDesktopState extends State<FirstScreenDesktop> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class PaysageScreen extends StatefulWidget {
+  const PaysageScreen({super.key});
+
+  @override
+  State<PaysageScreen> createState() => _PaysageScreenState();
+}
+
+class _PaysageScreenState extends State<PaysageScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
