@@ -1,11 +1,11 @@
-class Notif {
+class Commentaires {
   final String id;
   final String authorId;
   final String title;
   final String content;
   final DateTime createdAt;
 
-  Notif({
+  Commentaires({
     required this.id,
     required this.authorId,
     required this.title,
