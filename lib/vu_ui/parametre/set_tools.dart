@@ -1,39 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
 import 'package:projet_upc1/routes.dart';
-import 'package:projet_upc1/widgets_communs/barreapp.dart';
-import 'package:projet_upc1/vu_ui/recherche/search.dart';
-import 'package:projet_upc1/vu_ui/favoris/favoris.dart';
-import 'package:projet_upc1/vu_ui/accueil/home.dart';
 
-class SettingVieuw extends StatefulWidget {
-  const SettingVieuw({super.key});
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
 
   @override
-  State<SettingVieuw> createState() => _SettingVieuwState();
+  State<MyWidget> createState() => _MyWidgetState();
 }
 
-class _SettingVieuwState extends State<SettingVieuw> {
-  bool etat = false; 
-  void control (bool a){
-    setState(() {
-      etat = a;
-    });
-  }
-
-  int _selectedIndex = 0;
-
-  // Liste des pages associées à chaque onglet
-  final List<Widget> _pages = const [
-    MyHomePage(title: "bonjour"),
-    SearchVieuw(),
-    FavorisVieuw(),
-    SettingVieuw(),
-  ];
-
+class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
-   // final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -67,12 +45,11 @@ class _SettingVieuwState extends State<SettingVieuw> {
           ),
         ],
       ),
-       body: _pages[_selectedIndex],
-      bottomNavigationBar: // 🔽 Barre de navigation inférieure
-          NavBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-      ),
+      body: ListView(
+        children: [
+          
+        ],
+      )
     );
   }
 }

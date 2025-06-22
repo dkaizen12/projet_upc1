@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:provider/provider.dart';
+import 'services/authentif_serv.dart';
 import 'firebase_options.dart';
 import 'routes.dart';
 import 'present.dart';
@@ -15,12 +18,19 @@ import 'vu_ui/recherche/search.dart';
 import 'configuration/app_theme.dart';
 import 'configuration/constantes.dart';
 
-// ...
+// 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(providers: [
+      StreamProvider.value(initialData: null, 
+      value : AuthentifServ().user
+      ),
+    ], child: const MyApp() ,
+    )
+    );
 }
 
 class MyApp extends StatelessWidget {

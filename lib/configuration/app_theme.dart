@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppThemes {
@@ -14,10 +15,7 @@ class AppThemes {
       secondary: AppColors.secondary,
       error: AppColors.error,
     ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize :16),
-      bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-    ),
+   // textTheme: GoogleFonts.poppinsTextTheme(Theme.of().textTheme)
   );
 
   static final ThemeData darkTheme = ThemeData(
