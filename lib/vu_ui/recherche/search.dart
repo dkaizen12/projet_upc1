@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projet_upc1/routes.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
+import 'package:projet_upc1/vu_ui/accueil/home_post.dart';
 import 'package:projet_upc1/widgets_communs/barreapp.dart';
-import 'package:projet_upc1/vu_ui/accueil/home.dart';
-import 'package:projet_upc1/vu_ui/favoris/favoris.dart';
+import 'package:projet_upc1/vu_ui/favoris/fav.dart';
 import 'package:projet_upc1/vu_ui/parametre/parametre.dart';
 
 class SearchVieuw extends StatefulWidget {
@@ -18,9 +18,9 @@ class _SearchVieuwState extends State<SearchVieuw> {
 
   // Liste des pages associées à chaque onglet
   final List<Widget> _pages = const [
-    MyHomePage(title: "bonjour"),
+    MyHomePost(),
     SearchVieuw(),
-    FavorisVieuw(),
+    FavPost(),
     SettingVieuw(),
   ];
   @override
@@ -71,4 +71,3 @@ class _SearchVieuwState extends State<SearchVieuw> {
     );
   }
 }
-

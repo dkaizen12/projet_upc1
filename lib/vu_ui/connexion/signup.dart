@@ -1,33 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:projet_upc1/configuration/app_colors.dart';
-import 'package:projet_upc1/routes.dart';
-//import 'signup.dart';
-//import 'package:projet_upc1/configuration/app_theme.dart';
-//page d'enregistrement
+import '../../configuration/app_colors.dart';
+import '../../routes.dart';
 
-class Registre_page extends StatefulWidget {
-  const Registre_page({super.key});
+class Signup extends StatefulWidget {
+  const Signup({super.key});
 
   @override
-  State<Registre_page> createState() => _Registre_pageState();
+  State<Signup> createState() => _SignupState();
 }
 
-class _Registre_pageState extends State<Registre_page> {
+class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
+    return Scaffold(body: 
+      SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
                 height: MediaQuery.of(context).size.height * 0.60,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    bottomRight: Radius.circular(40),
-                  ),
                   color: Colors.grey,
                   image: DecorationImage(
                     image: AssetImage('lib/assets/images/page1.jpg'),
@@ -41,13 +33,23 @@ class _Registre_pageState extends State<Registre_page> {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  fontStyle: FontStyle.italic
+                  fontSize: 30,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  'Rire, informer, debattre, faire reflechir, \n Decouvrir Kinshasa comme jamais auparavent',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "poppins",
+                  ),
                 ),
               ),
               Column(
-                children: [ElevatedButton(onPressed: ()=> Navigator.pushNamed(context, Routes.home), 
-                child: Text("Creez son compte")),
+                children: [
                   ElevatedButton(
                     child: Text("Connectez-vous avec Google"),
                     onPressed:

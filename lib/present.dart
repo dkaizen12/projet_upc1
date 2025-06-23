@@ -48,6 +48,10 @@ class _FirstScreenMobileState extends State<FirstScreenMobile> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.70,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40)
+                  ),
                   color: Colors.grey,
                   image: DecorationImage(
                     image: AssetImage('lib/assets/images/page1.jpg'),
@@ -62,6 +66,7 @@ class _FirstScreenMobileState extends State<FirstScreenMobile> {
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
+                  fontStyle: FontStyle.italic
                 ),
               ),
               Padding(
@@ -71,13 +76,16 @@ class _FirstScreenMobileState extends State<FirstScreenMobile> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     fontFamily: "poppins",
+                    
                   ),
                 ),
               ),
                ElevatedButton(
-                    child: Text("Connectez-vous avec Google"),
+                    style: ButtonStyle(
+                    ),
+                    child: Text("Commencez"),
                     onPressed: () => Navigator.pushNamed(context, Routes.registre)
                   ),
             ],

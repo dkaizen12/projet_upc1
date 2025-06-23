@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
 import 'package:projet_upc1/routes.dart';
+import 'sign_in.dart';
 //import 'package:projet_upc1/configuration/app_theme.dart';
 //page de connexion
 
@@ -23,6 +24,10 @@ class _login_vieuwState extends State<login_vieuw> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.60,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
+                  ),
                   color: Colors.grey,
                   image: DecorationImage(
                     image: AssetImage('lib/assets/images/page1.jpg'),
@@ -39,21 +44,12 @@ class _login_vieuwState extends State<login_vieuw> {
                   fontSize: 30,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'Rire, informer, debattre, faire reflechir, \n Decouvrir Kinshasa comme jamais auparavent',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "poppins",
-                  ),
-                ),
+
+              ElevatedButton(
+                onPressed: () => SignIn(),
+                child: Text("Connexion"),
               ),
-              ElevatedButton(onPressed: ()=> Navigator.pushNamed(context, Routes.home),
-               child: Text("Connexion")),
-              Row(
+              Column(
                 children: [
                   ElevatedButton(
                     child: Text("Connectez-vous avec Google"),

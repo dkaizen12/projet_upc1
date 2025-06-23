@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projet_upc1/configuration/app_colors.dart';
+//import 'package:projet_upc1/configuration/app_colors.dart';
 import 'package:projet_upc1/routes.dart';
 
 class MyWidget extends StatefulWidget {
@@ -10,46 +10,65 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+  bool click = false;
+  bool Click1 = false;
+  void onClick(bool a) {
+    setState(() {
+      click = a;
+    });
+  }
+
+  void onClick1(bool b) {
+    setState(() {
+      Click1 = b;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 2,
-        title: const Text('', style: TextStyle(color: AppColors.textPrimary)),
-        leading: Builder(
-          builder:
-              (context) => IconButton(
-                icon: const Icon(Icons.menu, color: AppColors.textPrimary),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: GestureDetector(
-              onTap: () {
-                // Action sur clic de l'avatar (ouvrir profil, etc.)
-                Navigator.pushNamed(context, Routes.profil);
-              },
-              child: const CircleAvatar(
-                radius: 18,
-                backgroundImage: AssetImage(
-                  'lib/assets/images/page1.jpg',
-                ), // Ton image locale
-                backgroundColor: Colors.grey, // en cas d’image manquante
-              ),
-            ),
+      body: ListView(
+        children: [
+          Text("Paramètres"),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text("Profil"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.format_paint_outlined),
+            title: Text("Thème"),
+            trailing: Switch(value: click, onChanged: onClick),
+          ),
+          ListTile(
+            leading: Icon(Icons.notifications_none),
+            title: Text("Notifications"),
+            trailing: Switch(value: Click1, onChanged: onClick1),
+          ),
+          ListTile(
+            leading: Icon(Icons.help_center_outlined),
+            title: Text("Centre d'aide"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.view_list_outlined),
+            title: Text("Politique de confidentialité"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.chat),
+            title: Text("A propos de l'application"),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.logout_outlined, color: Colors.red),
+            title: Text("Deconnecter"),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.registre);
+            },
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          
-        ],
-      )
     );
   }
 }

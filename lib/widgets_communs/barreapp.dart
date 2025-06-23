@@ -4,11 +4,7 @@ class NavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const NavBar({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+  const NavBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,7 @@ class NavBar extends StatelessWidget {
           onTap: onTap,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          items: List.generate(5, (index) {
+          items: List.generate(4, (index) {
             return BottomNavigationBarItem(
               label: '',
               icon: Stack(
@@ -35,7 +31,9 @@ class NavBar extends StatelessWidget {
                       child: Icon(Icons.circle, size: 8, color: Colors.blue),
                     ),
                   Padding(
-                    padding: EdgeInsets.only(top: currentIndex == index ? 8.0 : 0),
+                    padding: EdgeInsets.only(
+                      top: currentIndex == index ? 8.0 : 0,
+                    ),
                     child: Icon(
                       _getIcon(index),
                       color: currentIndex == index ? Colors.blue : Colors.grey,
@@ -57,11 +55,11 @@ class NavBar extends StatelessWidget {
       case 1:
         return Icons.search;
       case 2:
-        return Icons.add_circle_outline;
+        return Icons.bookmark_add_outlined;
       case 3:
-        return Icons.favorite_border;
+        return Icons.settings;
       default:
-        return Icons.help_outline;
+        throw Exception('Index invalide : $index');
     }
   }
 }

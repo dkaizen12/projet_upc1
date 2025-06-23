@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:projet_upc1/vu_ui/accueil/home_post.dart';
 import 'package:projet_upc1/widgets_communs/barreapp.dart';
-import 'package:projet_upc1/vu_ui/accueil/home.dart';
 import 'package:projet_upc1/vu_ui/recherche/search.dart';
 import 'package:projet_upc1/vu_ui/parametre/parametre.dart';
+import 'fav.dart';
 
 class FavorisVieuw extends StatefulWidget {
-  const FavorisVieuw({super.key});
+  const FavorisVieuw({super.key, required title});
 
   @override
   State<FavorisVieuw> createState() => _FavorisVieuwState();
@@ -16,9 +17,9 @@ class _FavorisVieuwState extends State<FavorisVieuw> {
 
   // Liste des pages associées à chaque onglet
   final List<Widget> _pages = const [
-    MyHomePage(title: "bonjour"),
+    MyHomePost(),
     SearchVieuw(),
-    FavorisVieuw(),
+    FavPost(),
     SettingVieuw(),
   ];
   @override
