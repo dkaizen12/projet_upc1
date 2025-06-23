@@ -14,7 +14,12 @@ class _FavPostState extends State<FavPost> {
   Widget build(BuildContext context) {
     //final width = MediaQuery.of(context).size.width;
     return Scaffold(body: Column(children: [
-      Text("Tes favoris"),
+      Center(
+        child: Text("Tes favoris", style: TextStyle(
+          color: Colors.amber,
+        ),),
+      )
+      
     ]));
   }
 }

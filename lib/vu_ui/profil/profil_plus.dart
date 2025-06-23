@@ -29,6 +29,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
       final newUser = UserModel(
         nom: "Dady Lufua",
         email: "dady@stories.cd",
+        password: 'Dadykkkk123',
         likes: 72,
         abonnes: 450,
         abonnements: 110,

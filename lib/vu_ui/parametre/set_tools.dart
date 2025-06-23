@@ -33,7 +33,9 @@ class _MyWidgetState extends State<MyWidget> {
           ListTile(
             leading: Icon(Icons.person),
             title: Text("Profil"),
-            onTap: () {},
+            onTap: () {
+
+            },
           ),
           ListTile(
             leading: Icon(Icons.format_paint_outlined),
@@ -58,7 +60,9 @@ class _MyWidgetState extends State<MyWidget> {
           ListTile(
             leading: Icon(Icons.chat),
             title: Text("A propos de l'application"),
-            onTap: () {},
+            onTap: () {
+
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout_outlined, color: Colors.red),
@@ -70,5 +74,19 @@ class _MyWidgetState extends State<MyWidget> {
         ],
       ),
     );
+  }
+}
+
+class ProfilSetting extends StatefulWidget {
+  const ProfilSetting({super.key});
+
+  @override
+  State<ProfilSetting> createState() => _ProfilSettingState();
+}
+
+class _ProfilSettingState extends State<ProfilSetting> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

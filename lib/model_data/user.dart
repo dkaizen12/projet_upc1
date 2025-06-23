@@ -2,6 +2,7 @@ class UserModel {
   final int? id; // id est optionnel pour l’insertion
   final String nom;
   final String email;
+  final String password;
   final int likes;
   final int abonnes;
   final int abonnements;
@@ -12,6 +13,7 @@ class UserModel {
     this.id,
     required this.nom,
     required this.email,
+    required  this.password,
     required this.likes,
     required this.abonnes,
     required this.abonnements,
@@ -24,6 +26,7 @@ class UserModel {
       'id': id,
       'nom': nom,
       'email': email,
+      'password': password,
       'likes': likes,
       'abonnes': abonnes,
       'abonnements': abonnements,
@@ -37,6 +40,7 @@ class UserModel {
       id: map['id'],
       nom: map['nom'],
       email: map['email'],
+      password: map['password'],
       likes: map['likes'],
       abonnes: map['abonnes'],
       abonnements: map['abonnements'],
