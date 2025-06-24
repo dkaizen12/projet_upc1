@@ -1,34 +1,31 @@
 class NotifModel {
   final int? id; // id est optionnel pour l’insertion
   final String nom;
-  final String email;
-  final int likes;
-  final int abonnes;
-  final int abonnements;
+  final String at;
+  final bool lu;
+  final String title;
+  final String message;
   final String? photoUrl;
-  final List<String> posts;
 
   NotifModel({
     this.id,
     required this.nom,
-    required this.email,
-    required this.likes,
-    required this.abonnes,
-    required this.abonnements,
+    required this.at,
+    required this.lu,
+    required this.title,
+    required this.message,
     this.photoUrl,
-    required this.posts,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nom': nom,
-      'email': email,
-      'likes': likes,
-      'abonnes': abonnes,
-      'abonnements': abonnements,
+      'at': at,
+      'lu': lu,
+      'title': title,
+      'message': message,
       'photoUrl': photoUrl,
-      'posts': posts.join('|'),
     };
   }
 
@@ -36,12 +33,11 @@ class NotifModel {
     return NotifModel(
       id: map['id'],
       nom: map['nom'],
-      email: map['email'],
-      likes: map['likes'],
-      abonnes: map['abonnes'],
-      abonnements: map['abonnements'],
+      at: map['at'],
+      lu: map['lu'],
+      title: map['title'],
+      message: map['message'],
       photoUrl: map['photoUrl'],
-      posts: (map['posts'] as String).split('|'),
     );
   }
 }

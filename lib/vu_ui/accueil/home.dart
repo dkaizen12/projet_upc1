@@ -20,7 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Liste des pages associées à chaque onglet
   final List<Widget> _pages = [
     MyHomePost(),
-    SearchVieuw(),
+    SearchVieuw1(),
     FavPost(),
     MyWidget(),
   ];

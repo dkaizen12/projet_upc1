@@ -3,8 +3,8 @@ import 'package:projet_upc1/configuration/app_colors.dart';
 import 'package:projet_upc1/routes.dart';
 import 'package:projet_upc1/vu_ui/accueil/home_post.dart';
 import 'package:projet_upc1/vu_ui/favoris/fav.dart';
+import 'package:projet_upc1/vu_ui/recherche/search_tools.dart';
 import 'package:projet_upc1/widgets_communs/barreapp.dart';
-import 'package:projet_upc1/vu_ui/recherche/search.dart';
 
 
 class SettingVieuw extends StatefulWidget {
@@ -27,7 +27,7 @@ class _SettingVieuwState extends State<SettingVieuw> {
   // Liste des pages associées à chaque onglet
   final List<Widget> _pages = const [
     MyHomePost(),
-    SearchVieuw(),
+    SearchVieuw1(),
     FavPost(),
     SettingVieuw(),
   ];

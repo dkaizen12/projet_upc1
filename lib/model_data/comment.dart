@@ -1,34 +1,25 @@
 class CommentModel {
   final int? id; // id est optionnel pour l’insertion
   final String nom;
-  final String email;
   final int likes;
-  final int abonnes;
-  final int abonnements;
+  final String comment;
   final String? photoUrl;
-  final List<String> posts;
 
   CommentModel({
     this.id,
     required this.nom,
-    required this.email,
     required this.likes,
-    required this.abonnes,
-    required this.abonnements,
+    required this.comment,
     this.photoUrl,
-    required this.posts,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nom': nom,
-      'email': email,
       'likes': likes,
-      'abonnes': abonnes,
-      'abonnements': abonnements,
+      'comment': comment,
       'photoUrl': photoUrl,
-      'posts': posts.join('|'),
     };
   }
 
@@ -36,12 +27,9 @@ class CommentModel {
     return CommentModel(
       id: map['id'],
       nom: map['nom'],
-      email: map['email'],
       likes: map['likes'],
-      abonnes: map['abonnes'],
-      abonnements: map['abonnements'],
+      comment: map['comment'],
       photoUrl: map['photoUrl'],
-      posts: (map['posts'] as String).split('|'),
     );
   }
 }

@@ -11,7 +11,7 @@ class ControlAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     final _user = Provider.of<User?>(context);
     if (_user == null) {
-      return FirstScreen();
+      return FirstScreenMobile();
     } else {
       return MyHomePage(title: "Bonjour");
     }

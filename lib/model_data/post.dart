@@ -1,47 +1,65 @@
+//import 'package:projet_upc1/widgets_communs/post_card.dart';
+
 class UserModel {
   final int? id; // id est optionnel pour l’insertion
   final String nom;
-  final String email;
+  final String theme;
+  final String Title;
+  final String at;
+  final bool suivi;
   final int likes;
-  final int abonnes;
-  final int abonnements;
-  final String? photoUrl;
-  final List<String> posts;
+  final int Comment;
+  final bool favoris;
+  final String? photoPost;
+  final String? photoUser;
+  final String postContent;
 
   UserModel({
     this.id,
     required this.nom,
-    required this.email,
+    required this.theme,
+    required this.Title,
+    required this.at, 
+    required this.suivi,
     required this.likes,
-    required this.abonnes,
-    required this.abonnements,
-    this.photoUrl,
-    required this.posts,
+    required this.Comment,
+    required this.favoris,
+    this.photoPost,
+    this.photoUser,
+    required this.postContent,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nom': nom,
-      'email': email,
+      'theme': theme,
+      'title': Title,
+      'at': at,
+      'suivi': suivi,
       'likes': likes,
-      'abonnes': abonnes,
-      'abonnements': abonnements,
-      'photoUrl': photoUrl,
-      'posts': posts.join('|'),
+      'comment': Comment,
+      'favoris': favoris,
+      'photoPost' : photoPost,
+      'photoUser' : photoUser,
+      'postContent' : postContent
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'],
-      nom: map['nom'],
-      email: map['email'],
-      likes: map['likes'],
-      abonnes: map['abonnes'],
-      abonnements: map['abonnements'],
-      photoUrl: map['photoUrl'],
-      posts: (map['posts'] as String).split('|'),
+      id :map['id'],
+      nom : map['nom'] ,
+      theme : map['theme'],
+      Title : map['title'],
+      at : map['at'],
+      suivi : map['suivi'],
+      likes : map['likes'],
+      Comment : map ['Comment'],
+      favoris: map['favoris'],
+      photoPost : map['photoPost'],
+      photoUser : map['photoUser'],
+      postContent : map['postContent']
     );
   }
 }

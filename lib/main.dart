@@ -11,7 +11,6 @@ import 'vu_ui/accueil/home.dart';
 import 'vu_ui/connexion/connexion.dart';
 import 'vu_ui/connexion/registre.dart';
 import 'vu_ui/favoris/favoris.dart';
-import 'vu_ui/notification/notif.dart';
 import 'vu_ui/parametre/parametre.dart';
 import 'vu_ui/profil/profil.dart';
 import 'vu_ui/recherche/search.dart';
@@ -51,12 +50,11 @@ class MyApp extends StatelessWidget {
         Routes.login: (context) => const login_vieuw(),
         Routes.registre: (context) => const Registre_page(),
         Routes.favoris: (context) => const FavorisVieuw(title: "favoris",),
-        Routes.notif: (context) => const NotifVieuw(),
         Routes.setting: (context) => const SettingVieuw(),
         Routes.search: (context) => const SearchVieuw(),
         Routes.profil: (context) => const ProfilScreen(),
       },
-      home: FirstScreen(),
+      home: FirstScreenMobile(),
     );
   }
 }

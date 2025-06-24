@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 //import 'package:projet_upc1/routes.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
 
-class SearchVieuw extends StatefulWidget {
-  const SearchVieuw({super.key});
+class SearchVieuw1 extends StatefulWidget {
+  const SearchVieuw1({super.key});
 
   @override
-  State<SearchVieuw> createState() => _SearchVieuwState();
+  State<SearchVieuw1> createState() => _SearchVieuwState();
 }
 
-class _SearchVieuwState extends State<SearchVieuw> {
+class _SearchVieuwState extends State<SearchVieuw1> {
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _SearchVieuwState extends State<SearchVieuw> {
         ),
       ),
     ), 
-      const Divider(
+     Divider(
             thickness: 1,
             color: Colors.black,
             height: 0,
