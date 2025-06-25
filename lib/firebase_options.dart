@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'projet-upc1.firebaseapp.com',
     storageBucket: 'projet-upc1.firebasestorage.app',
   );
+
 }

@@ -1,7 +1,3 @@
-Parfait. Voici **l'intégration complète de Firebase Auth (email/mot de passe + Google)** avec **création automatique d’un `UserModel`** dans Firestore pour chaque nouvel utilisateur.
-
----
-
 ## 🔧 1. Prérequis `pubspec.yaml`
 
 Ajoute les packages :
