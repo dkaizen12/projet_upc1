@@ -1,0 +1,315 @@
+Parfait 👌, maintenant que tu as mis en place l’**authentification Firebase (email + Google)** dans tes pages personnalisées, voici comment aller plus loin avec les deux points suivants :
+
+---
+
+## ✅ 1. 🔄 **Synchroniser Firestore dans `ProfilWidget`**
+
+Pour afficher les vraies infos utilisateur (nom, email, photo, stats…) dans ton `ProfilWidget`, tu dois :
+
+### a. 🔍 Récupérer l’ID utilisateur courant :
+
+```dart
+final currentUser = FirebaseAuth.instance.currentUser;
+```
+
+### b. 🔥 Récupérer les données Firestore associées à cet utilisateur :
+
+Crée une méthode dans `AuthService` ou dans un autre fichier comme `user_service.dart` :
+
+```dart
+Future<UserModel?> getCurrentUserData() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) return null;
+
+  final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+  if (!doc.exists) return null;
+
+  return UserModel.fromMap(doc.data()!);
+}
+```
+
+### c. 📦 Dans `ProfilWidget` :
+
+```dart
+class ProfilWidget extends StatefulWidget {
+  const ProfilWidget({super.key});
+
+  @override
+  State<ProfilWidget> createState() => _ProfilWidgetState();
+}
+
+class _ProfilWidgetState extends State<ProfilWidget> {
+  UserModel? userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final data = await AuthService().getCurrentUserData();
+    setState(() {
+      userModel = data;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (userModel == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 40,
+          backgroundImage: userModel!.photoUrl != null
+              ? NetworkImage(userModel!.photoUrl!)
+              : const AssetImage('assets/default_avatar.png') as ImageProvider,
+        ),
+        Text(userModel!.nom, style: const TextStyle(fontSize: 20)),
+        Text(userModel!.email),
+        Text("Abonnés : ${userModel!.abonnes}"),
+        Text("Abonnements : ${userModel!.abonnements}"),
+        Text("Likes : ${userModel!.likes}"),
+      ],
+    );
+  }
+}
+```
+
+---
+
+## ✅ 2. 🔐 Gérer la session utilisateur (`FirebaseAuth.instance.currentUser`)
+
+Firebase gère **automatiquement la session** de l'utilisateur :
+
+* Une fois connecté, `FirebaseAuth.instance.currentUser` **reste disponible** à travers les redémarrages de l’app (persistant).
+* Tu peux donc l’utiliser à tout moment dans l’app pour :
+
+  * vérifier si l’utilisateur est connecté
+  * récupérer son UID, email, nom, photo...
+
+### Exemple :
+
+```dart
+final user = FirebaseAuth.instance.currentUser;
+
+if (user != null) {
+  print("Utilisateur connecté : ${user.email}");
+} else {
+  print("Aucun utilisateur connecté");
+}
+```
+
+### ➕ Tu peux même faire une redirection conditionnelle au démarrage :
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  runApp(MaterialApp(
+    home: user != null ? const HomePage() : const LoginView(),
+  ));
+}
+```
+
+---
+
+## 📌 Tu veux aller plus loin ?
+
+Souhaites-tu que je t’aide à intégrer :
+
+* 🔁 La **mise à jour** du profil utilisateur ?
+* 🧭 Un **middleware `AuthGate`** pour empêcher l’accès aux pages non connectées ?
+* 🧼 Un **bouton de déconnexion** global ?
+* 💾 Un cache local du `UserModel` avec `SharedPreferences` ou `Provider` ?
+* 📸 Un système d’upload de photo de profil ?
+
+Dis-moi ce que tu veux prioriser et je te le code directement adapté à ton app `Stories_kin`.
+
+Parfait ✅ ! Voici donc ce qu'on va faire maintenant :
+
+---
+
+## ✅ 1. 🔐 **Déconnexion avec le bouton que tu as déjà**
+
+Si tu as déjà placé un `ElevatedButton` ou un `ListTile` pour la déconnexion, il te suffit d’y ajouter :
+
+```dart
+onPressed: () async {
+  await AuthService().logout();
+  // Optionnel : Efface aussi le cache local si on utilise SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('user_model');
+
+  // Redirige vers la page de login
+  Navigator.pushReplacementNamed(context, '/login');
+},
+```
+
+Assure-toi que `AuthService().logout()` contient bien :
+
+```dart
+Future<void> logout() async {
+  await FirebaseAuth.instance.signOut();
+  await GoogleSignIn().signOut();
+}
+```
+
+---
+
+## ✅ 2. 💾 **Stocker localement le `UserModel`**
+
+On va faire un **double système** :
+
+### 🔹 A. Avec `SharedPreferences` pour persister les données localement (même après redémarrage)
+
+### 🔹 B. Avec `Provider` pour accéder rapidement aux infos dans toute l’app (gestion d’état)
+
+---
+
+### 🔧 Étape 1 : Ajouter les packages
+
+Dans `pubspec.yaml` :
+
+```yaml
+dependencies:
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+```
+
+---
+
+### 🔧 Étape 2 : Créer un `UserProvider`
+
+```dart
+import 'package:flutter/material.dart';
+import '../model_data/user.dart';
+
+class UserProvider with ChangeNotifier {
+  UserModel? _user;
+
+  UserModel? get user => _user;
+
+  void setUser(UserModel user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _user = null;
+    notifyListeners();
+  }
+}
+```
+
+---
+
+### 🔧 Étape 3 : Stocker / lire le `UserModel` dans `SharedPreferences`
+
+#### ➕ Ajoute dans `auth_service.dart` :
+
+```dart
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> saveUserToLocal(UserModel user) async {
+  final prefs = await SharedPreferences.getInstance();
+  final userJson = jsonEncode(user.toMap());
+  await prefs.setString('user_model', userJson);
+}
+
+Future<UserModel?> loadUserFromLocal() async {
+  final prefs = await SharedPreferences.getInstance();
+  final userJson = prefs.getString('user_model');
+  if (userJson == null) return null;
+
+  final data = jsonDecode(userJson);
+  return UserModel.fromMap(data);
+}
+```
+
+---
+
+### 🔧 Étape 4 : Modifier la connexion pour sauvegarder localement
+
+Dans `loginView` ou `registre_page`, après un login/register réussi :
+
+```dart
+final userData = await AuthService().getCurrentUserData();
+
+if (userData != null) {
+  await saveUserToLocal(userData);
+  Provider.of<UserProvider>(context, listen: false).setUser(userData);
+  Navigator.pushReplacementNamed(context, '/home');
+}
+```
+
+---
+
+### 🔧 Étape 5 : Initialiser `UserProvider` avec les données locales (au démarrage)
+
+Dans `main.dart` :
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final savedUser = await loadUserFromLocal();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MyApp(initialUser: savedUser),
+    ),
+  );
+}
+```
+
+Et dans `MyApp` :
+
+```dart
+class MyApp extends StatelessWidget {
+  final UserModel? initialUser;
+
+  const MyApp({super.key, this.initialUser});
+
+  @override
+  Widget build(BuildContext context) {
+    if (initialUser != null) {
+      Provider.of<UserProvider>(context, listen: false).setUser(initialUser!);
+    }
+
+    return MaterialApp(
+      home: FirebaseAuth.instance.currentUser != null
+          ? const HomePage()
+          : const LoginView(),
+    );
+  }
+}
+```
+
+---
+
+## 🧪 Résultat :
+
+✅ Tu as maintenant :
+
+* Un système de **déconnexion complet** (Firebase + Google + nettoyage local)
+* Un système **persistant** avec `SharedPreferences`
+* Un **Provider réactif** pour accéder rapidement au `UserModel` dans n’importe quel widget
+
+---
+
+Souhaites-tu que je te montre :
+
+* 🔁 Comment mettre à jour le `UserModel` et re-synchroniser le cache ?
+* 📸 Ou bien passer à l’upload de photo de profil via `Firebase Storage` + image\_picker ?

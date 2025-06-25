@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
+import '../../widgets_communs/post_card.dart';
 //import 'package:projet_upc1/routes.dart';
 
 class FavPost extends StatefulWidget {
@@ -18,6 +19,13 @@ class _FavPostState extends State<FavPost> {
       child: Text("Mes Favoris"),
       ),
       Divider(height: 0.8, color: AppColors.divider),
+      ListView(
+        children: [
+          PostTile(categorie: "game", titre: "les jeux vidéos de demain", auteur: "steven", date: "24/04/25", onTap: (){
+            
+          })
+        ],
+      )
     ]));
   }
 }

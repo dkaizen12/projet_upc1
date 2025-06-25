@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../model_data/user.dart';
 import '../../services/user_serv.dart';
-import '../../widgets_communs/stories.dart';
+import '../../widgets_communs/Profil.dart';
 
 
 class ProfilScreen extends StatefulWidget {

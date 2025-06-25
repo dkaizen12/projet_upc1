@@ -1,14 +1,6 @@
-//import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:projet_upc1/vu_ui/connexion/registre.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:google_sign_in/google_sign_in.dart';
-import 'services/authentif_serv.dart';
-//import 'package:projet_upc1/vu_ui/connexion/registre.dart';
 import 'routes.dart';
 import 'configuration/app_colors.dart';
-//import 'configuration/app_theme.dart';
-
 
 class FirstScreenMobile extends StatefulWidget {
   const FirstScreenMobile({super.key});
@@ -18,7 +10,6 @@ class FirstScreenMobile extends StatefulWidget {
 }
 
 class _FirstScreenMobileState extends State<FirstScreenMobile> {
-  bool enChargement = false;
   @override
   Widget build(BuildContext context) {
     //final size = MediaQuery.of(context).size;
@@ -80,12 +71,5 @@ class _FirstScreenMobileState extends State<FirstScreenMobile> {
         ),
       ),
     );
-  }
-
-  signin() {
-    setState(() {
-      enChargement = true;
-      AuthentifServ().inscriptiongoogle();
-    });
   }
 }

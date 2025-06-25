@@ -57,7 +57,49 @@ class _MyHomePostState extends State<MyHomePost> {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (BuildContext context) => const Post(),
+                          builder:
+                              (BuildContext context) => const Post(
+                                nom: "darren",
+                                titre: "le pays va mal",
+                                contenu: '''
+Nagi est un jeune rêveur au regard perçant,
+naviguant entre les rues urbaines et les pensées profondes.\n
+Son esprit curieux l’emmène souvent au-delà des apparences,
+cherchant dans chaque murmure du vent une histoire à raconter.\n
+Toujours discret mais présent, il observe, écoute et capture l'instant,
+comme si le monde entier n’était qu’un brouillon d’univers à explorer.\n
+Nagi, c’est la poésie silencieuse d’un regard qui ne juge pas,
+mais qui comprend.
+
+Nagi est un jeune rêveur au regard perçant,
+naviguant entre les rues urbaines et les pensées profondes.\n
+Son esprit curieux l’emmène souvent au-delà des apparences,
+cherchant dans chaque murmure du vent une histoire à raconter.\n
+Toujours discret mais présent, il observe, écoute et capture l'instant,
+comme si le monde entier n’était qu’un brouillon d’univers à explorer.\n
+Nagi, c’est la poésie silencieuse d’un regard qui ne juge pas,
+mais qui comprend.
+
+Nagi est un jeune rêveur au regard perçant,
+naviguant entre les rues urbaines et les pensées profondes.\n
+Son esprit curieux l’emmène souvent au-delà des apparences,
+cherchant dans chaque murmure du vent une histoire à raconter.\n
+Toujours discret mais présent, il observe, écoute et capture l'instant,
+comme si le monde entier n’était qu’un brouillon d’univers à explorer.\n
+Nagi, c’est la poésie silencieuse d’un regard qui ne juge pas,
+mais qui comprend.
+
+Nagi est un jeune rêveur au regard perçant,
+naviguant entre les rues urbaines et les pensées profondes.\n
+Son esprit curieux l’emmène souvent au-delà des apparences,
+cherchant dans chaque murmure du vent une histoire à raconter.\n
+Toujours discret mais présent, il observe, écoute et capture l'instant,
+comme si le monde entier n’était qu’un brouillon d’univers à explorer.\n
+Nagi, c’est la poésie silencieuse d’un regard qui ne juge pas,
+mais qui comprend.
+''',
+                                date: 'Le 25/06/24',
+                              ),
                         ),
                       ); // Exemple de navigation
                     },

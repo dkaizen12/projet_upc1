@@ -1,6 +1,6 @@
 //import 'package:projet_upc1/widgets_communs/post_card.dart';
 
-class UserModel {
+class PostModel {
   final int? id; // id est optionnel pour l’insertion
   final String nom;
   final String theme;
@@ -14,7 +14,7 @@ class UserModel {
   final String? photoUser;
   final String postContent;
 
-  UserModel({
+  PostModel({
     this.id,
     required this.nom,
     required this.theme,
@@ -46,8 +46,8 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+  factory PostModel.fromMap(Map<String, dynamic> map) {
+    return PostModel(
       id :map['id'],
       nom : map['nom'] ,
       theme : map['theme'],

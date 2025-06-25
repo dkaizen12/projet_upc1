@@ -16,20 +16,23 @@ import 'vu_ui/profil/profil.dart';
 import 'vu_ui/recherche/search.dart';
 import 'configuration/app_theme.dart';
 import 'configuration/constantes.dart';
-
-// 
+import 'vu_ui/parametre/apropos.dart';
+import 'vu_ui/parametre/politique.dart';
+import 'vu_ui/parametre/profilset.dart';
+import 'vu_ui/parametre/helpcenter.dart';
+//
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
-    MultiProvider(providers: [
-      StreamProvider.value(initialData: null, 
-      value : AuthentifServ().user
-      ),
-    ], child: const MyApp() ,
-    )
-    );
+    MultiProvider(
+      providers: [
+        StreamProvider.value(initialData: null, value: AuthentifServ().user),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -49,10 +52,14 @@ class MyApp extends StatelessWidget {
         Routes.post: (context) => const MyHomePost(),
         Routes.login: (context) => const login_vieuw(),
         Routes.registre: (context) => const Registre_page(),
-        Routes.favoris: (context) => const FavorisVieuw(title: "favoris",),
+        Routes.favoris: (context) => const FavorisVieuw(title: "favoris"),
         Routes.setting: (context) => const SettingVieuw(),
         Routes.search: (context) => const SearchVieuw(),
         Routes.profil: (context) => const ProfilScreen(),
+        Routes.aide:(context) => const HelpCenter(), 
+        Routes.profilset :(context) => const ProfilSetting(), 
+        Routes.politique: (context) => const Politique(), 
+        Routes.apropos: (context) => const Apropros(),
       },
       home: FirstScreenMobile(),
     );

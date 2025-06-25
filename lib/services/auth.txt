@@ -1,0 +1,549 @@
+Parfait. Voici **l'intégration complète de Firebase Auth (email/mot de passe + Google)** avec **création automatique d’un `UserModel`** dans Firestore pour chaque nouvel utilisateur.
+
+---
+
+## 🔧 1. Prérequis `pubspec.yaml`
+
+Ajoute les packages :
+
+```yaml
+dependencies:
+  firebase_auth: ^4.17.4
+  firebase_core: ^2.30.0
+  cloud_firestore: ^4.17.0
+  google_sign_in: ^6.2.1
+```
+
+---
+
+## 📦 2. Crée un service d’authentification
+
+`/services/auth_service.dart` :
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../model_data/user.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  // 🔸 Inscription Email/Mot de passe
+  Future<UserModel?> registerWithEmail({
+    required String nom,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final userModel = UserModel(
+        id: null,
+        nom: nom,
+        email: email,
+        password: password,
+        likes: 0,
+        abonnes: 0,
+        abonnements: 0,
+        photoUrl: null, // image par défaut si tu veux
+        posts: [],
+      );
+
+      await _db.collection('utilisateurs').doc(cred.user!.uid).set(userModel.toMap());
+
+      return userModel;
+    } catch (e) {
+      print("Erreur inscription: $e");
+      return null;
+    }
+  }
+
+  // 🔸 Connexion Email/Mot de passe
+  Future<UserModel?> loginWithEmail(String email, String password) async {
+    try {
+      final cred = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return await getUserModel(cred.user!.uid);
+    } catch (e) {
+      print("Erreur connexion: $e");
+      return null;
+    }
+  }
+
+  // 🔸 Connexion avec Google
+  Future<UserModel?> signInWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      final cred = await _auth.signInWithCredential(credential);
+
+      final doc = await _db.collection('utilisateurs').doc(cred.user!.uid).get();
+
+      if (!doc.exists) {
+        // Créer profil
+        final userModel = UserModel(
+          id: null,
+          nom: googleUser?.displayName ?? 'Utilisateur',
+          email: cred.user!.email ?? '',
+          password: '',
+          likes: 0,
+          abonnes: 0,
+          abonnements: 0,
+          photoUrl: cred.user?.photoURL,
+          posts: [],
+        );
+        await _db.collection('utilisateurs').doc(cred.user!.uid).set(userModel.toMap());
+        return userModel;
+      }
+
+      return UserModel.fromMap(doc.data()!);
+    } catch (e) {
+      print("Erreur Google: $e");
+      return null;
+    }
+  }
+
+  // 🔸 Récupérer utilisateur courant
+  Future<UserModel?> getCurrentUserModel() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    return getUserModel(user.uid);
+  }
+
+  // 🔸 Charger UserModel depuis Firestore
+  Future<UserModel?> getUserModel(String uid) async {
+    final doc = await _db.collection('utilisateurs').doc(uid).get();
+    if (doc.exists) return UserModel.fromMap(doc.data()!);
+    return null;
+  }
+
+  void logout() => _auth.signOut();
+}
+```
+
+---
+
+## 🧩 3. Intégration dans ton `SignUp` ou `Login` form (existant)
+
+Ajoute l’appel à `AuthService().registerWithEmail(...)` ou `loginWithEmail(...)` dans les boutons de confirmation.
+
+---
+
+## 🧑‍💼 4. Mise à jour `ProfilScreen`
+
+```dart
+@override
+void initState() {
+  super.initState();
+  loadUserFromFirestore();
+}
+
+Future<void> loadUserFromFirestore() async {
+  final auth = AuthService();
+  final currentUser = await auth.getCurrentUserModel();
+
+  if (currentUser != null) {
+    setState(() => user = currentUser);
+  }
+}
+```
+
+---
+
+## ✅ Résultat
+
+* Lors d'une inscription : `UserModel` est créé automatiquement dans **Firestore**
+* Lors d'une connexion : les infos sont récupérées depuis **Firestore**
+* Tu peux maintenant utiliser `ProfilWidget(user: user!)` basé sur Firestore
+* Auth Google ou Email possible sans changer ton `UserModel`
+
+---
+
+Souhaites-tu aussi :
+
+* Créer l’interface `SignUpForm`/`LoginForm` complète ?
+* Afficher l’image par défaut si `photoUrl` est null ?
+* Intégrer un système de vérification d’email ou de mot de passe oublié ?
+
+Je peux te guider ou générer le code directement.
+
+Parfait ! Tu as déjà une belle interface d’inscription. Pour intégrer **Firebase Auth** avec **email/mot de passe** et **Google**, tu dois :
+
+---
+
+### ✅ 1. S'assurer que Firebase est bien configuré :
+
+Dans `firebase_options.dart` + `main.dart`, tu dois avoir :
+
+```dart
+await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+```
+
+Et avoir activé les méthodes de connexion **email/mot de passe** et **Google** dans [Firebase Console > Authentication > Sign-in methods](https://console.firebase.google.com/).
+
+---
+
+### ✅ 2. Ajouter les dépendances :
+
+Dans ton `pubspec.yaml` :
+
+```yaml
+firebase_core: ^2.25.4
+firebase_auth: ^4.17.4
+google_sign_in: ^6.2.1
+cloud_firestore: ^4.13.6
+```
+
+---
+
+### ✅ 3. Ajouter les `TextEditingController`
+
+Tu dois les déclarer dans `_Registre_pageState` :
+
+```dart
+final _nomController = TextEditingController();
+final _emailController = TextEditingController();
+final _passwordController = TextEditingController();
+final _confirmPasswordController = TextEditingController();
+```
+
+Et les relier dans chaque `TextField` :
+
+```dart
+TextField(
+  controller: _nomController,
+  ...
+)
+```
+
+---
+
+### ✅ 4. Logique d'inscription Firebase
+
+Remplace le bouton `onPressed` de “Confirmer” par :
+
+```dart
+onPressed: () async {
+  if (!isChecked) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Veuillez accepter la politique de confidentialité.")));
+    return;
+  }
+
+  if (_passwordController.text != _confirmPasswordController.text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Les mots de passe ne correspondent pas.")));
+    return;
+  }
+
+  try {
+    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    // Ajouter un UserModel dans Firestore
+    await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).set({
+      'nom': _nomController.text.trim(),
+      'email': _emailController.text.trim(),
+      'password': _passwordController.text.trim(), // ⚠️ Ne jamais enregistrer de mot de passe réel en clair (demo uniquement)
+      'likes': 0,
+      'abonnes': 0,
+      'abonnements': 0,
+      'photoUrl': null,
+      'posts': [],
+    });
+
+    Navigator.pushNamed(context, Routes.home);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur : $e")));
+  }
+}
+```
+
+---
+
+### ✅ 5. Connexion avec Google (plus tard)
+
+Tu pourras ensuite utiliser `GoogleSignIn` dans le bouton "Se connecter avec Google".
+
+---
+
+✅ Si tu veux, je te montre maintenant **comment adapter la page de connexion** pour qu'elle utilise `FirebaseAuth.signInWithEmailAndPassword`.
+
+Souhaite-tu que je te code la connexion maintenant avec le même style ?
+
+Très bonne question ! ✅
+
+---
+
+### 🔐 **Non, ce n’est pas la même chose.**
+
+Il y a **deux étapes bien distinctes** dans l'utilisation de `FirebaseAuth` :
+
+---
+
+### 1. **Inscription d’un nouvel utilisateur**
+
+Tu l’as déjà fait avec :
+
+```dart
+FirebaseAuth.instance.createUserWithEmailAndPassword(...)
+```
+
+👉 Cela **crée un nouveau compte** dans Firebase Auth + (dans ton cas) une entrée dans Firestore.
+
+---
+
+### 2. **Connexion (authentification) d’un utilisateur déjà inscrit**
+
+C’est là qu’on utilise :
+
+```dart
+FirebaseAuth.instance.signInWithEmailAndPassword(
+  email: _emailController.text,
+  password: _passwordController.text,
+);
+```
+
+👉 Cela permet à l'utilisateur **de se connecter** à son compte existant (que tu as inscrit précédemment).
+
+---
+
+### 📌 En résumé :
+
+| Action          | Méthode Firebase                 |
+| --------------- | -------------------------------- |
+| Créer un compte | `createUserWithEmailAndPassword` |
+| Se connecter    | `signInWithEmailAndPassword`     |
+
+---
+
+Si tu veux, je te montre **comment faire la page de connexion complète** avec ce `signInWithEmailAndPassword`, dans le même style que ta page d'inscription. Veux-tu que je te le code ?
+
+Parfait ! Voici **comment intégrer `FirebaseAuth.signInWithEmailAndPassword`** dans ta page de connexion `login_vieuw` pour authentifier les utilisateurs avec **email + mot de passe**.
+
+---
+
+## ✅ Étapes :
+
+1. 📦 Assure-toi d’avoir **`firebase_auth`** dans ton `pubspec.yaml`
+2. 🧠 Ajoute les **contrôleurs de texte** pour lire les champs email & mot de passe
+3. 🔐 Utilise `FirebaseAuth.instance.signInWithEmailAndPassword(...)` dans le `onPressed`
+4. ✅ Affiche des erreurs s’il y a échec
+
+---
+
+## 🔧 Code modifié et fonctionnel
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // ⬅️ Import FirebaseAuth
+import 'package:projet_upc1/routes.dart';
+import 'registre.dart';
+import 'dart:ui';
+
+class login_vieuw extends StatefulWidget {
+  const login_vieuw({super.key});
+
+  @override
+  State<login_vieuw> createState() => _login_vieuwState();
+}
+
+class _login_vieuwState extends State<login_vieuw> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool isLoading = false;
+
+  void _login() async {
+    setState(() => isLoading = true);
+    try {
+      // 🔐 Connexion via Firebase
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // ✅ Si succès → Accès à l’accueil
+      Navigator.pushReplacementNamed(context, Routes.home);
+    } on FirebaseAuthException catch (e) {
+      String message = "Erreur inconnue";
+      if (e.code == 'user-not-found') message = "Aucun utilisateur trouvé.";
+      if (e.code == 'wrong-password') message = "Mot de passe incorrect.";
+      if (e.code == 'invalid-email') message = "Email invalide.";
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // ⬇️ Image de fond
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/images/page1.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          // ⬇️ Formulaire flouté
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white54),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("Sign in", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                      const SizedBox(height: 20),
+
+                      Align(alignment: Alignment.centerLeft, child: Text("Email", style: TextStyle(color: Colors.white))),
+                      const SizedBox(height: 5),
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.7),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+                          hintText: "Entrez votre email",
+                        ),
+                      ),
+
+                      const SizedBox(height: 15),
+                      Align(alignment: Alignment.centerLeft, child: Text("Password", style: TextStyle(color: Colors.white))),
+                      const SizedBox(height: 5),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.7),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+                          hintText: "Entrez votre mot de passe",
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+                              ),
+                              child: const Text("Se connecter"),
+                            ),
+
+                      const SizedBox(height: 20),
+                      Row(
+                        children: const [
+                          Expanded(child: Divider(color: Colors.white)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Text("Se connecter avec", style: TextStyle(color: Colors.white)),
+                          ),
+                          Expanded(child: Divider(color: Colors.white)),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          // TODO: Intégration Google plus tard
+                        },
+                        icon: const Icon(Icons.g_mobiledata),
+                        label: const Text("Se connecter avec Google"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black87,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                        ),
+                      ),
+
+                      const SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Pas de compte ? ", style: TextStyle(color: Colors.white)),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => const Registre_page()));
+                            },
+                            child: const Text("Créer votre compte"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+---
+
+## ✅ Ce que tu as maintenant :
+
+* Connexion par email & mot de passe
+* Affichage d’erreurs Firebase si mauvais identifiants
+* Redirection vers `Routes.home` si succès
+
+---
+
+Souhaites-tu que j’ajoute maintenant :
+
+* ✅ La **connexion avec Google**
+* ✅ Un **bouton “mot de passe oublié”**
+* ✅ Un petit message d’accueil personnalisé après connexion ?
+
+Dis-moi comment tu veux compléter !

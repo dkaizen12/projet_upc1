@@ -1,0 +1,251 @@
+import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart'; // Ajoute ce package
+
+class PostDetailScreen extends StatefulWidget {
+  final UserModel user;
+  final String titre;
+  final String contenu;
+  final String date;
+
+  const PostDetailScreen({
+    super.key,
+    required this.user,
+    required this.titre,
+    required this.contenu,
+    required this.date,
+  });
+
+  @override
+  State<PostDetailScreen> createState() => _PostDetailScreenState();
+}
+
+class _PostDetailScreenState extends State<PostDetailScreen> {
+  bool isLiked = false;
+  bool isFollowed = true;
+  int likeCount = 100000;
+
+  final List<CommentModel> comments = [
+    CommentModel(nom: "Alice", likes: 3, comment: "Super analyse 👏", photoUrl: null),
+    CommentModel(nom: "John", likes: 1, comment: "Intéressant 🤔", photoUrl: null),
+  ];
+
+  final TextEditingController _commentController = TextEditingController();
+
+  void showComments() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        builder: (context, scrollController) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // 🔸 Liste des commentaires
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: comments.length,
+                  itemBuilder: (context, index) {
+                    final c = comments[index];
+                    return Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          backgroundImage:
+                              c.photoUrl != null ? NetworkImage(c.photoUrl!) : null,
+                        ),
+                        title: Text(c.nom),
+                        subtitle: Text(c.comment),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.thumb_up_alt_outlined, size: 18),
+                            const SizedBox(width: 4),
+                            Text('${c.likes}'),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // 🔸 Champ d'ajout de commentaire
+              Card(
+                margin: const EdgeInsets.only(top: 10),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Commenter en tant que ${widget.user.nom}"),
+                      TextField(
+                        controller: _commentController,
+                        maxLength: 200,
+                        maxLines: 2,
+                        decoration: const InputDecoration(
+                          hintText: "Écris ton commentaire...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_commentController.text.trim().isNotEmpty) {
+                              setState(() {
+                                comments.add(
+                                  CommentModel(
+                                    nom: widget.user.nom,
+                                    comment: _commentController.text.trim(),
+                                    likes: 0,
+                                    photoUrl: widget.user.photoUrl,
+                                  ),
+                                );
+                                _commentController.clear();
+                              });
+                              Navigator.pop(context); // Fermer le modal
+                            }
+                          },
+                          child: const Text("Publier"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void sharePost() {
+    Share.share(
+      "${widget.titre}\n\n${widget.contenu.substring(0, 100)}...",
+      subject: "Lis ce post sur Stories +243",
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // 🔹 Image bannière
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  image: widget.user.photoUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(widget.user.photoUrl!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.all(8),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  color: Colors.black,
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+
+              // 🔹 Carte principale (identique au code précédent)
+              // ... Badge, titre, auteur + suivi, contenu
+
+              // 🔹 Barre de réaction
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        isLiked ? Icons.thumb_up : Icons.thumb_up_outlined,
+                        color: isLiked ? Colors.blue : Colors.black,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isLiked = !isLiked;
+                          likeCount += isLiked ? 1 : -1;
+                        });
+                      },
+                    ),
+                    Text("$likeCount aimés"),
+
+                    IconButton(
+                      icon: const Icon(Icons.comment_outlined),
+                      onPressed: showComments,
+                    ),
+                    Text("${comments.length} commentaires"),
+
+                    IconButton(
+                      icon: const Icon(Icons.share),
+                      onPressed: sharePost,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 🔸 Modèles
+class CommentModel {
+  final int? id;
+  final String nom;
+  final int likes;
+  final String comment;
+  final String? photoUrl;
+
+  CommentModel({
+    this.id,
+    required this.nom,
+    required this.likes,
+    required this.comment,
+    this.photoUrl,
+  });
+}
+
+class UserModel {
+  final int? id;
+  final String nom;
+  final String email;
+  final String password;
+  final int likes;
+  final int abonnes;
+  final int abonnements;
+  final String? photoUrl;
+  final List<String> posts;
+
+  UserModel({
+    this.id,
+    required this.nom,
+    required this.email,
+    required this.password,
+    required this.likes,
+    required this.abonnes,
+    required this.abonnements,
+    this.photoUrl,
+    required this.posts,
+  });
+}

@@ -1,0 +1,365 @@
+Voici comment **ajouter un joli bord au `CircleAvatar`** de ton widget `ProfilSetting` 👇 :
+
+---
+
+### ✅ Modification dans `build()` : remplacer `CircleAvatar` par une structure avec `Container` et `BoxDecoration`
+
+```dart
+// 🔹 Profil en haut
+Center(
+  child: Column(
+    children: [
+      Container(
+        padding: const EdgeInsets.all(4), // espace entre image et bord
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.blueAccent, width: 3), // 👈 bord coloré
+        ),
+        child: CircleAvatar(
+          radius: 40,
+          backgroundColor: Colors.grey.shade300,
+          backgroundImage: photoUrl != null ? NetworkImage(photoUrl!) : null,
+          child: photoUrl == null ? const Icon(Icons.person, size: 40) : null,
+        ),
+      ),
+      const SizedBox(height: 10),
+      Text(userName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      Text(userEmail, style: const TextStyle(color: Colors.grey)),
+    ],
+  ),
+),
+```
+
+---
+
+### 🔍 Résultat :
+
+* L’image de profil aura un **cercle bleu élégant** autour.
+* Si `photoUrl == null`, l’icône par défaut reste visible.
+* Tu peux changer la couleur `Colors.blueAccent` ou `Colors.deepPurple`, etc.
+
+Souhaites-tu qu'on ajoute :
+
+* 🖼 un bouton pour **modifier la photo** ?
+* ⚙️ des **paramètres supplémentaires** dans ce `ProfilSetting` ?
+
+
+Parfait 🙌 ! On va maintenant :
+
+---
+
+## ✅ Ajouter un bouton pour **modifier la photo de profil**
+
+👉 On va utiliser :
+
+* `image_picker` pour sélectionner une image depuis la galerie ou la caméra.
+* (Optionnel) `firebase_storage` pour l’upload, mais ici on va juste **afficher l’image localement** pour garder ça simple.
+
+---
+
+### 🔧 Étape 1 : Ajoute `image_picker` dans `pubspec.yaml`
+
+```yaml
+dependencies:
+  image_picker: ^1.0.4
+```
+
+---
+
+### ✅ Étape 2 : Mise à jour du widget `ProfilSetting`
+
+Voici **la version modifiée complète** avec un bouton de modification de la photo :
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+class ProfilSetting extends StatefulWidget {
+  const ProfilSetting({super.key});
+
+  @override
+  State<ProfilSetting> createState() => _ProfilSettingState();
+}
+
+class _ProfilSettingState extends State<ProfilSetting> {
+  String userName = "Dady Lufua";
+  String userEmail = "dady@stories.cd";
+  String? photoUrl;
+  File? _imageFile;
+
+  Future<void> _pickImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      setState(() {
+        _imageFile = File(picked.path);
+      });
+
+      // Ici tu pourrais uploader sur Firebase Storage + mettre à jour Firestore
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Mon profil")),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // 🔹 Profil en haut avec bord
+          Center(
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.blueAccent, width: 3),
+                      ),
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.grey.shade300,
+                        backgroundImage: _imageFile != null
+                            ? FileImage(_imageFile!)
+                            : (photoUrl != null
+                                ? NetworkImage(photoUrl!)
+                                : null) as ImageProvider?,
+                        child: _imageFile == null && photoUrl == null
+                            ? const Icon(Icons.person, size: 40)
+                            : null,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: const Icon(Icons.edit, size: 16, color: Colors.blue),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(userName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(userEmail, style: const TextStyle(color: Colors.grey)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          // 🔹 Autres paramètres inchangés
+          ListTile(
+            leading: const Icon(Icons.lock_outline),
+            title: const Text("Changer mot de passe"),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text("Changer mot de passe"),
+                  content: const Text("Cette fonction sera bientôt disponible."),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Fermer"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text("Voir mes publications"),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Fonctionnalité à venir")),
+              );
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.favorite_outline),
+            title: const Text("Mes favoris"),
+            onTap: () {},
+          ),
+
+          const Divider(height: 30),
+
+          ListTile(
+            leading: const Icon(Icons.delete_forever, color: Colors.red),
+            title: const Text("Supprimer mon compte", style: TextStyle(color: Colors.red)),
+            onTap: () => showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: const Text("Confirmer la suppression"),
+                content: const Text(
+                    "Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Annuler"),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Compte supprimé (simulation)")),
+                      );
+                    },
+                    child: const Text("Supprimer"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+---
+
+## 🔧 Propositions de **paramètres supplémentaires** à ajouter :
+
+Voici quelques idées de paramètres utiles à ajouter dans ce `ProfilSetting` :
+
+| Fonctionnalité                             | Description                           |
+| ------------------------------------------ | ------------------------------------- |
+| 🎨 **Changer thème (sombre/clair)**        | Switch entre thème clair et sombre    |
+| 🌐 **Langue de l'application**             | Choix entre Français, Anglais...      |
+| 📱 **Modifier numéro de téléphone**        | Via un champ ou OTP                   |
+| 🔒 **Activer sécurité supplémentaire**     | Mot de passe + vérification e-mail    |
+| 🧼 **Effacer les données locales (cache)** | Vider le cache ou reset utilisateur   |
+| 🚪 **Déconnexion**                         | Bouton de déconnexion rapide          |
+| 📄 **Mentions légales / Politique**        | Redirection vers page d’infos légales |
+
+Souhaites-tu que je t’en code un ou plusieurs parmi ceux-là ?
+
+Parfait 👍 ! Si tu as déjà un `Switch` pour le **changement de thème**, tu peux maintenant :
+
+## ✅ 1. Assurer une **intégration propre avec `Provider`** (ou `SharedPreferences`) pour gérer l’état du thème dans toute l’app.
+
+Voici un résumé de ce que tu peux faire, **sans casser ton switch existant** :
+
+---
+
+## ✅ Étape 1 : Créer un `ThemeProvider` (si pas encore fait)
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ThemeProvider extends ChangeNotifier {
+  bool _isDarkMode = false;
+
+  bool get isDarkMode => _isDarkMode;
+
+  ThemeProvider() {
+    _loadTheme(); // Charge depuis SharedPreferences au lancement
+  }
+
+  void toggleTheme(bool isOn) {
+    _isDarkMode = isOn;
+    _saveTheme(isOn);
+    notifyListeners();
+  }
+
+  Future<void> _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    notifyListeners();
+  }
+
+  Future<void> _saveTheme(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', value);
+  }
+}
+```
+
+---
+
+## ✅ Étape 2 : Fournir le thème au `MaterialApp` via `Provider`
+
+Dans ton `main.dart` :
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        // d'autres providers ici
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+```
+
+Et dans `MyApp` :
+
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return MaterialApp(
+      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: const HomePage(),
+    );
+  }
+}
+```
+
+---
+
+## ✅ Étape 3 : Connecter ton `Switch` existant
+
+Dans ton `ProfilSetting` (ou autre fichier `settings.dart`), modifie ton switch :
+
+```dart
+ListTile(
+  leading: const Icon(Icons.format_paint_outlined),
+  title: const Text("Thème"),
+  trailing: Consumer<ThemeProvider>(
+    builder: (context, themeProvider, _) => Switch(
+      value: themeProvider.isDarkMode,
+      onChanged: (value) {
+        themeProvider.toggleTheme(value);
+      },
+    ),
+  ),
+),
+```
+
+---
+
+✅ **Tu conserves** ton interface actuelle mais elle est maintenant :
+
+* ✅ Réactive avec `Provider`
+* ✅ Persistée avec `SharedPreferences`
+* ✅ Adaptée à `MaterialApp.themeMode`

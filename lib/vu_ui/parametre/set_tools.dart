@@ -29,22 +29,24 @@ class _MyWidgetState extends State<MyWidget> {
     return Scaffold(
       body: ListView(
         children: [
-          Padding(padding: EdgeInsets.only(left: 4, top: 3), 
-          child:Text("Paramètres", style: TextStyle(
-            color: AppColors.textPrimary, 
-            fontSize: 25, 
-            fontWeight: FontWeight.w600
-          ),) ,
+          Padding(
+            padding: EdgeInsets.only(left: 4, top: 3),
+            child: Text(
+              "Paramètres",
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-          const Divider(
-            thickness: 1,
-            color: AppColors.divider,
-            height: 0.5,
-          ),
+          const Divider(thickness: 1, color: AppColors.divider, height: 0.5),
           ListTile(
             leading: Icon(Icons.person),
             title: Text("Profil"),
-            onTap: () => ProfilSetting(),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.profilset);
+            },
           ),
           ListTile(
             leading: Icon(Icons.format_paint_outlined),
@@ -59,17 +61,23 @@ class _MyWidgetState extends State<MyWidget> {
           ListTile(
             leading: Icon(Icons.help_center_outlined),
             title: Text("Centre d'aide"),
-            onTap: () => HelpCenter(),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.aide);
+            },
           ),
           ListTile(
             leading: Icon(Icons.view_list_outlined),
             title: Text("Politique de confidentialité"),
-            onTap: () => Politique(),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.politique);
+            },
           ),
           ListTile(
             leading: Icon(Icons.chat),
             title: Text("A propos de l'application"),
-            onTap: () => Apropros(),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.apropos);
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout_outlined, color: AppColors.accent),
@@ -80,55 +88,6 @@ class _MyWidgetState extends State<MyWidget> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class ProfilSetting extends StatefulWidget {
-  const ProfilSetting({super.key});
-
-  @override
-  State<ProfilSetting> createState() => _ProfilSettingState();
-}
-
-class _ProfilSettingState extends State<ProfilSetting> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("Mon profil"),
-    );
-  }
-}
-
-class HelpCenter extends StatelessWidget {
-  const HelpCenter({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("Centre d'aide"),
-    );
-  }
-}
-
-class Politique extends StatelessWidget {
-  const Politique({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("Politique de confidentialité"),
-    );
-  }
-}
-
-class Apropros extends StatelessWidget {
-  const Apropros({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text("A propos de l'application"),
     );
   }
 }

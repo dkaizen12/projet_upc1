@@ -6,6 +6,7 @@ import 'package:projet_upc1/vu_ui/recherche/search_tools.dart';
 import 'package:projet_upc1/vu_ui/favoris/fav.dart';
 import 'package:projet_upc1/vu_ui/parametre/set_tools.dart';
 import 'package:projet_upc1/vu_ui/accueil/home_post.dart';
+import 'package:projet_upc1/widgets_communs/drawer_menu.dart';
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
@@ -27,13 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(
-        backgroundColor: AppColors.primary,
-        width: 200,
-        child: Center(child: Text("Menu du drawer"), 
-        ),
-        
-      ),
+      drawer: DrawerScreen(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 2,
@@ -60,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundImage: AssetImage(
                   'lib/assets/images/page1.jpg',
                 ), // Ton image locale
-                backgroundColor: Colors.grey, // en cas d’image manquante
+                backgroundColor: AppColors.textSecondary, // en cas d’image manquante
               ),
             ),
           ),

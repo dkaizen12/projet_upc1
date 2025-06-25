@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:projet_upc1/routes.dart';
 import 'dart:ui';
 import 'package:projet_upc1/vu_ui/connexion/connexion.dart';
-//import 'package:projet_upc1/configuration/app_theme.dart';
+//import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
+//import '../../services/authentif_serv.dart';
+
+
 //page d'enregistrement
 
 class Registre_page extends StatefulWidget {
@@ -15,6 +20,7 @@ class Registre_page extends StatefulWidget {
 
 class _Registre_pageState extends State<Registre_page> {
   bool isChecked = false; // Pour la case à cocher
+  bool enChargement = true;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +69,8 @@ class _Registre_pageState extends State<Registre_page> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      //Nom d'utilisateur 
-                  Align(
+                      //Nom d'utilisateur
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Nom d'utilisateur",
@@ -129,8 +135,7 @@ class _Registre_pageState extends State<Registre_page> {
                         ),
                       ),
 
-                      //confirmer votre mot de passe 
-
+                      //confirmer votre mot de passe
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -215,6 +220,12 @@ class _Registre_pageState extends State<Registre_page> {
                       ElevatedButton.icon(
                         onPressed: () {
                           // Connexion Google
+                       //   signin() {
+                         //   setState(() {
+                           //   enChargement = true;
+                              //AuthentifServ().inscriptiongoogle();
+                            //});
+                          //}
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

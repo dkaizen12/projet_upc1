@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 //import 'package:projet_upc1/vu_ui/parametre/parametre.dart';
 import '../../model_data/user.dart';
 import '../../services/user_serv.dart';
-import '../../widgets_communs/stories.dart';
+import '../../widgets_communs/Profil.dart';
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
 
