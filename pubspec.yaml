@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   provider: ^6.1.5
+  shared_preferences: ^2.1.0
 
 # 🔥 Firebase (versions compatibles entre elles)
   firebase_core: ^2.32.0
@@ -63,7 +64,7 @@ flutter_icons:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -80,10 +81,8 @@ flutter:
   assets:
   - lib/assets/images/
   - lib/assets/icon_logo/
-  - lib/assets/animation/
   - lib/assets/cvs_json_data/
   - lib/assets/fonts/
-  - lib/assets/musique/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

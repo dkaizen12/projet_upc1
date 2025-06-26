@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projet_upc1/configuration/app_colors.dart';
 import 'package:projet_upc1/routes.dart';
+import '../../services/authentif_serv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../controls/controlProviderTheme.dart';
+import 'package:provider/provider.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -49,9 +53,16 @@ class _MyWidgetState extends State<MyWidget> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.format_paint_outlined),
             title: Text("Thème"),
-            trailing: Switch(value: click, onChanged: onClick),
+            trailing: Consumer<ThemeProvider>(
+              builder:
+                  (context, themeProvider, _) => Switch(
+                    value: themeProvider.isDarkMode,
+                    onChanged: (value) {
+                      themeProvider.toggleTheme(value);
+                    },
+                  ),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.notifications_none),
@@ -82,7 +93,11 @@ class _MyWidgetState extends State<MyWidget> {
           ListTile(
             leading: Icon(Icons.logout_outlined, color: AppColors.accent),
             title: Text("Deconnecter"),
-            onTap: () {
+            onTap: () async {
+              await AuthService().signOut();
+              // Optionnel : Efface aussi le cache local si on utilise SharedPreferences
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('user_model');
               Navigator.pushNamed(context, Routes.registre);
             },
           ),

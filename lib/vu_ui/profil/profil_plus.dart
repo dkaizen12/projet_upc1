@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../model_data/user.dart';
-import '../../services/user_serv.dart';
+//import '../../services/authentif_serv.dart';
 import '../../widgets_communs/Profil.dart';
+//import '../../services/user_serv.dart';
 
 
 class ProfilScreen extends StatefulWidget {
@@ -15,32 +16,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
   UserModel? user;
 
-  @override
-  void initState() {
-    super.initState();
-    loadOrCreateUser();
-  }
 
-  Future<void> loadOrCreateUser() async {
-    final db = UserDatabaseService();
-    final users = await db.getAllUsers();
-
-    if (users.isEmpty) {
-      final newUser = UserModel(
-        nom: "Dady Lufua",
-        email: "dady@stories.cd",
-        password: 'Dadykkkk123',
-        likes: 72,
-        abonnes: 450,
-        abonnements: 110,
-        posts: ["Premier post", "Histoire drôle", "Dossier culturel"],
-      );
-      await db.insertUser(newUser);
-      setState(() => user = newUser);
-    } else {
-      setState(() => user = users.first);
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +25,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
-              child: ProfilWidget(user: user!),
+              child: ProfilWidget(),
             ),
     );
   }

@@ -4,10 +4,10 @@ import 'package:projet_upc1/routes.dart';
 import 'dart:ui';
 import 'package:projet_upc1/vu_ui/connexion/connexion.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:google_sign_in/google_sign_in.dart';
-//import '../../services/authentif_serv.dart';
-
+import '../../services/authentif_serv.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //page d'enregistrement
 
@@ -21,6 +21,10 @@ class Registre_page extends StatefulWidget {
 class _Registre_pageState extends State<Registre_page> {
   bool isChecked = false; // Pour la case à cocher
   bool enChargement = true;
+  final _nomController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +83,7 @@ class _Registre_pageState extends State<Registre_page> {
                       ),
                       SizedBox(height: 5),
                       TextField(
+                        controller: _nomController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white.withValues(alpha: 0.7),
@@ -101,6 +106,7 @@ class _Registre_pageState extends State<Registre_page> {
                       ),
                       SizedBox(height: 5),
                       TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white.withValues(alpha: 0.7),
@@ -123,6 +129,7 @@ class _Registre_pageState extends State<Registre_page> {
                       ),
                       SizedBox(height: 5),
                       TextField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           filled: true,
@@ -145,6 +152,7 @@ class _Registre_pageState extends State<Registre_page> {
                       ),
                       SizedBox(height: 5),
                       TextField(
+                        controller: _confirmPasswordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           filled: true,
@@ -181,9 +189,60 @@ class _Registre_pageState extends State<Registre_page> {
 
                       // 🔸 Bouton confirmer
                       ElevatedButton(
-                        onPressed: () {
-                          // Logique de validation
-                          Navigator.pushNamed(context, Routes.home);
+                        onPressed: () async {
+                          if (!isChecked) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Veuillez accepter la politique de confidentialité.",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (_passwordController.text !=
+                              _confirmPasswordController.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Les mots de passe ne correspondent pas.",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          try {
+                            final credential = await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                );
+
+                            // Ajouter un UserModel dans Firestore
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(credential.user!.uid)
+                                .set({
+                                  'nom': _nomController.text.trim(),
+                                  'email': _emailController.text.trim(),
+                                  'password':
+                                      _passwordController.text
+                                          .trim(), // ⚠️ Ne jamais enregistrer de mot de passe réel en clair (demo uniquement)
+                                  'likes': 0,
+                                  'abonnes': 0,
+                                  'abonnements': 0,
+                                  'photoUrl': null,
+                                  'posts': [],
+                                });
+
+                            Navigator.pushNamed(context, Routes.home);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Erreur : $e")),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
@@ -218,14 +277,16 @@ class _Registre_pageState extends State<Registre_page> {
 
                       // 🔸 Bouton Google
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // Connexion Google
-                       //   signin() {
-                         //   setState(() {
-                           //   enChargement = true;
-                              //AuthentifServ().inscriptiongoogle();
-                            //});
-                          //}
+                        onPressed: () async {
+                          final result = await AuthService().signInWithGoogle();
+                          if (result != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Bienvenue ${result.nom} !"),
+                              ),
+                            );
+                            Navigator.pushNamed(context, Routes.home);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

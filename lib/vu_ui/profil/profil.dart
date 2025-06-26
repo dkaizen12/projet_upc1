@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 //import 'package:projet_upc1/vu_ui/favoris/fav.dart';
 //import 'package:projet_upc1/vu_ui/parametre/parametre.dart';
 import '../../model_data/user.dart';
-import '../../services/user_serv.dart';
+//import '../../services/user_serv.dart';
 import '../../widgets_communs/Profil.dart';
+
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
 
@@ -15,40 +16,11 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
-      UserModel? user;
-
-  @override
-  void initState() {
-    super.initState();
-    loadOrCreateUser();
-  }
-
-  Future<void> loadOrCreateUser() async {
-    final db = UserDatabaseService();
-    final users = await db.getAllUsers();
-
-    if (users.isEmpty) {
-      final newUser = UserModel(
-        nom: "Dady Lufua",
-        email: "dady@stories.cd",
-        password: 'Dadykkkk123',
-        likes: 72,
-        abonnes: 450,
-        abonnements: 110,
-        posts: ["Premier post", "Histoire drôle", "Dossier culturel"],
-      );
-      await db.insertUser(newUser);
-      setState(() => user = newUser);
-    } else {
-      setState(() => user = users.first);
-    }
-  }
-
-
+  UserModel? user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         title: Text("Profil"),
         leading: IconButton(
           onPressed: () {
@@ -57,12 +29,13 @@ class _ProfilScreenState extends State<ProfilScreen> {
           icon: Icon(Icons.close),
         ),
       ),
-      body: user == null
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: ProfilWidget(user: user!),
-            ),
+      body:
+          user == null
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: ProfilWidget(),
+              ),
     );
   }
 }

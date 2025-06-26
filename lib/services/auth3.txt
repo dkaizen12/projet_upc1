@@ -1,7 +1,5 @@
 Parfait 👌, maintenant que tu as mis en place l’**authentification Firebase (email + Google)** dans tes pages personnalisées, voici comment aller plus loin avec les deux points suivants :
 
----
-
 ## ✅ 1. 🔄 **Synchroniser Firestore dans `ProfilWidget`**
 
 Pour afficher les vraies infos utilisateur (nom, email, photo, stats…) dans ton `ProfilWidget`, tu dois :
@@ -78,8 +76,6 @@ class _ProfilWidgetState extends State<ProfilWidget> {
   }
 }
 ```
-
----
 
 ## ✅ 2. 🔐 Gérer la session utilisateur (`FirebaseAuth.instance.currentUser`)
 
@@ -168,7 +164,6 @@ Future<void> logout() async {
 On va faire un **double système** :
 
 ### 🔹 A. Avec `SharedPreferences` pour persister les données localement (même après redémarrage)
-
 ### 🔹 B. Avec `Provider` pour accéder rapidement aux infos dans toute l’app (gestion d’état)
 
 ---

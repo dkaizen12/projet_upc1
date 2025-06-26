@@ -304,5 +304,3 @@ if (result != null) {
   * 🔄 Synchroniser Firestore dans `ProfilWidget` pour afficher les vrais utilisateurs ?
   * 🔑 Gérer la session utilisateur (`FirebaseAuth.instance.currentUser`) ?
   * ✅ Ajouter la vérification “mot de passe oublié” si besoin ?
-
-Souhaites-tu aussi que je te donne un **fichier complet remanié** avec les `TextEditingController`, les appels Firebase et les snackbars déjà intégrés dans `Registre_page` et `login_vieuw` ?

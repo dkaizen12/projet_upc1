@@ -1,7 +1,5 @@
 Voici comment **ajouter un joli bord au `CircleAvatar`** de ton widget `ProfilSetting` 👇 :
 
----
-
 ### ✅ Modification dans `build()` : remplacer `CircleAvatar` par une structure avec `Container` et `BoxDecoration`
 
 ```dart
@@ -343,8 +341,7 @@ Dans ton `ProfilSetting` (ou autre fichier `settings.dart`), modifie ton switch 
 
 ```dart
 ListTile(
-  leading: const Icon(Icons.format_paint_outlined),
-  title: const Text("Thème"),
+  title: Text("Thème"),
   trailing: Consumer<ThemeProvider>(
     builder: (context, themeProvider, _) => Switch(
       value: themeProvider.isDarkMode,
@@ -354,11 +351,10 @@ ListTile(
     ),
   ),
 ),
+
 ```
 
----
-
-✅ **Tu conserves** ton interface actuelle mais elle est maintenant :
+✅ Tu conserves ton interface actuelle mais elle est maintenant :
 
 * ✅ Réactive avec `Provider`
 * ✅ Persistée avec `SharedPreferences`

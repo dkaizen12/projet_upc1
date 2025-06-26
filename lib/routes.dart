@@ -8,7 +8,7 @@ class Routes {
   static const setting = '/settings';
   static const search = '/search';
   static const post = '/post';
-  static const String apropos = "/apropos";
+  static const String apropos = '/apropos';
   static const String politique = "/politique";
   static const String aide = "/aide";
   static const String profilset = "/profilset";

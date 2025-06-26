@@ -541,5 +541,3 @@ Souhaites-tu que j’ajoute maintenant :
 * ✅ La **connexion avec Google**
 * ✅ Un **bouton “mot de passe oublié”**
 * ✅ Un petit message d’accueil personnalisé après connexion ?
-
-Dis-moi comment tu veux compléter !
